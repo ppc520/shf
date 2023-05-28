@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
 import com.ppc.entity.Admin;
 import com.ppc.service.AdminService;
+import com.ppc.service.RoleService;
 import com.ppc.util.QiniuUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,71 +21,86 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin")
-public class AdminController extends BaseController{
+public class AdminController extends BaseController {
     @Reference
     private AdminService adminService;
+    @Reference
+    private RoleService roleService;
 
-//    分页及带条件查询
+    //    分页及带条件查询
     @RequestMapping
-    public String findPage(ModelMap map, HttpServletRequest request){
-        Map<String,Object> filters=getFilters(request);
-        map.put("filters",filters);
-        PageInfo<Admin> pageInfo=adminService.findPage(filters);
-        map.put("page",pageInfo);
+    public String findPage(ModelMap map, HttpServletRequest request) {
+        Map<String, Object> filters = getFilters(request);
+        map.put("filters", filters);
+        PageInfo<Admin> pageInfo = adminService.findPage(filters);
+        map.put("page", pageInfo);
         return "admin/index";
     }
 
     @RequestMapping("/create")
-    public String goAddPage(){
+    public String goAddPage() {
         return "admin/create";
     }
 
     @RequestMapping("/save")
-    public String save(Admin admin){
+    public String save(Admin admin) {
         adminService.insert(admin);
         return "common/successPage";
     }
 
     @RequestMapping("/delete/{id}")
-    public String delete(@PathVariable Long id){
+    public String delete(@PathVariable Long id) {
         adminService.delete(id);
         return "redirect:/admin";
     }
 
     @RequestMapping("/edit/{id}")
-    public String goEditPage(@PathVariable Long id,Map map){
+    public String goEditPage(@PathVariable Long id, Map map) {
         Admin admin = adminService.getById(id);
-        map.put("admin",admin);
+        map.put("admin", admin);
         return "admin/edit";
     }
 
     @RequestMapping("/update")
-    public String update(Admin admin){
+    public String update(Admin admin) {
         adminService.update(admin);
         return "common/successPage";
     }
 
     @RequestMapping("/uploadShow/{id}")
-    public String toUploadPage(@PathVariable Long id,Map map){
-        map.put("id",id);
+    public String toUploadPage(@PathVariable Long id, Map map) {
+        map.put("id", id);
         return "admin/upload";
     }
 
     @RequestMapping("/upload/{id}")
-    public String upload(@PathVariable Long id, @RequestParam MultipartFile file){
+    public String upload(@PathVariable Long id, @RequestParam MultipartFile file) {
         try {
             Admin admin = adminService.getById(id);
             byte[] bytes = file.getBytes();
-            String uuidName= UUID.randomUUID().toString();
-            QiniuUtil.upload2Qiniu(bytes,uuidName);
+            String uuidName = UUID.randomUUID().toString();
+            QiniuUtil.upload2Qiniu(bytes, uuidName);
 
-            admin.setHeadUrl("http://ru6fapo6u.hn-bkt.clouddn.com/"+uuidName);
+            admin.setHeadUrl("http://ru6fapo6u.hn-bkt.clouddn.com/" + uuidName);
             adminService.update(admin);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return "common/successPage";
 
     }
 
+    @RequestMapping("/assignShow/{adminId}")
+    public String aoAssignShowPage(@PathVariable Long adminId, ModelMap modelMap) {
+        modelMap.addAttribute("adminId", adminId);
+        Map<String, Object> rolesByAdminId = roleService.findRolesByAdminId(adminId);
+        modelMap.addAllAttributes(rolesByAdminId);
+        return "admin/assignShow";
+    }
+
+    @RequestMapping("/assignRole")
+    public String assignRole(Long adminId,Long[] roleIds){
+        roleService.assignRole(adminId,roleIds);
+        return "common/successPage";
+    }
 }

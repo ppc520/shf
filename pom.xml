@@ -37,6 +37,8 @@
         <zkclient.version>0.1</zkclient.version>
 
         <qiniu.version></qiniu.version>
+
+        <spring.security.version>5.2.7.RELEASE</spring.security.version>
     </properties>
 
     <!-- 依赖管理 -->
@@ -170,6 +172,17 @@
                 <groupId>com.qiniu</groupId>
                 <artifactId>qiniu-java-sdk</artifactId>
                 <version>7.2.0</version>
+            </dependency>
+            <!-- spring security安全框架 -->
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-web</artifactId>
+                <version>${spring.security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-config</artifactId>
+                <version>${spring.security.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
