@@ -7,6 +7,7 @@ import com.ppc.service.AdminService;
 import com.ppc.service.RoleService;
 import com.ppc.util.QiniuUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,8 @@ public class AdminController extends BaseController {
     private AdminService adminService;
     @Reference
     private RoleService roleService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     //    分页及带条件查询
     @RequestMapping
@@ -44,6 +47,7 @@ public class AdminController extends BaseController {
 
     @RequestMapping("/save")
     public String save(Admin admin) {
+        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
         adminService.insert(admin);
         return "common/successPage";
     }

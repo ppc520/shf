@@ -6,6 +6,7 @@ import com.ppc.entity.Role;
 import com.ppc.service.PermissionService;
 import com.ppc.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,6 +57,7 @@ public class RoleController extends BaseController{
         return SUCCESS_PAGE;
     }
 
+    @PreAuthorize("hasAuthority('Delete')")//只有delete权限后才能执行这个方法
     @RequestMapping("/delete/{roleId}")
     public String delete(@PathVariable Long roleId) {
         roleService.delete(roleId);

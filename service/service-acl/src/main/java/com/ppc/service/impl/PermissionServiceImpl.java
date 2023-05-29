@@ -66,4 +66,15 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission> implement
         List<Permission> treeList = PermissionHelper.bulid(permissionList);
         return treeList;
     }
+
+    @Override
+    public List<String> getPermissionCodesByAdminId(Long id) {
+        List<String> permissionCodes=null;
+        if (id==1){
+            permissionCodes=permissionDao.getAllPermissionCodes();
+        }else {
+            permissionCodes=permissionDao.getPermissionCodesByAdminId(id);
+        }
+        return permissionCodes;
+    }
 }

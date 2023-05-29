@@ -11,4 +11,6 @@ public interface PermissionService extends BaseService<Permission> {
     void assignPermission(Long roleId, Long[] permissionIds);
 
     List<Permission> getMenuPermissionByAdminId(Long userId);
+
+    List<String> getPermissionCodesByAdminId(Long id);
 }

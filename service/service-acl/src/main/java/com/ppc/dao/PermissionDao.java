@@ -8,4 +8,8 @@ public interface PermissionDao extends BaseDao<Permission> {
     List<Permission> findAll();
 
     List<Permission> getMenuPermissionByAdminId(Long userId);
+
+    List<String> getAllPermissionCodes();
+
+    List<String> getPermissionCodesByAdminId(Long id);
 }
