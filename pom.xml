@@ -39,6 +39,7 @@
         <qiniu.version></qiniu.version>
 
         <spring.security.version>5.2.7.RELEASE</spring.security.version>
+        <redis-session.version>1.3.5.RELEASE</redis-session.version>
     </properties>
 
     <!-- 依赖管理 -->
@@ -183,6 +184,12 @@
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-config</artifactId>
                 <version>${spring.security.version}</version>
+            </dependency>
+            <!--spring-session 同步-->
+            <dependency>
+                <groupId>org.springframework.session</groupId>
+                <artifactId>spring-session-data-redis</artifactId>
+                <version>${redis-session.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
